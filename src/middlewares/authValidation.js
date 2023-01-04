@@ -1,3 +1,5 @@
+import {validateToken} from "../repository/sessions.repository.js"
+
 export default async function authValidation(req, res, next){
     const {authorization} = req.headers
 
