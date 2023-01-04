@@ -5,6 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "dev": "npx nodemon ./src/server.js",
+    "start": "node ./src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,5 +18,12 @@
   "bugs": {
     "url": "https://github.com/RodrigoAAraujo/projetao18-linkr-back/issues"
   },
-  "homepage": "https://github.com/RodrigoAAraujo/projetao18-linkr-back#readme"
+  "homepage": "https://github.com/RodrigoAAraujo/projetao18-linkr-back#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.20",
+    "pg": "^8.8.0"
+  }
 }
