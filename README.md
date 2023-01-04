@@ -1,3 +1,3 @@
 # projetao18-linkr-back
 
-Projeto em equipe
+Projetão em equipe
