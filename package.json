@@ -16,5 +16,14 @@
   "bugs": {
     "url": "https://github.com/RodrigoAAraujo/projetao18-linkr-back/issues"
   },
-  "homepage": "https://github.com/RodrigoAAraujo/projetao18-linkr-back#readme"
+  "homepage": "https://github.com/RodrigoAAraujo/projetao18-linkr-back#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "pg": "^8.8.0"
+  }
 }
