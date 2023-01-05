@@ -1,3 +1,5 @@
+import { getUsersByName } from "../repository/users.repository.js";
+
 
 export async function likePost(req, res){
     const {authorization} = req.headers;
@@ -7,6 +9,23 @@ export async function likePost(req, res){
     }
 
     try{
+
+    } catch(err){
+        console.log(err);
+        res.status(500).send(err.message);
+    }
+}
+
+export async function sendUsersNamesImages(req, res){
+    const {name} = req.params
+
+    try{
+        const users = await getUsersByName(name)
+
+        console.log(users)
+
+        res.send(users.rows)
+        return
 
     } catch(err){
         console.log(err);
