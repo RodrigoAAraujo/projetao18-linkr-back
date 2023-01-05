@@ -5,8 +5,8 @@ import { validLoginSchema, validSchemaUser } from "../middlewares/users.middlewa
 
 const router = Router()
 
-router.post("/signin", validSchemaUser, create)
-router.post("/signup", validLoginSchema, login)
+router.post("/signup", validSchemaUser, create)
+router.post("/signin", validLoginSchema, login)
 router.post("/renew", authValidation, sessionRenew)
 router.get("/users/:name", sendUsersNamesImages)
 
