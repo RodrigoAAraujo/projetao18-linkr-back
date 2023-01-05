@@ -1,13 +1,16 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { Refresh } from "./refresh";
+import userRoutes from "./routes/users.routes.js"
+
+import { Refresh } from "./refresh.js";
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use(userRoutes)
 setTimeout(() => {
    Refresh(25000) 
 }, 30000);

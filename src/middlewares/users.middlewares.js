@@ -1,4 +1,4 @@
-import { userLogSchemma, userRegSchemma } from "../models/User";
+import { userLogSchemma, userRegSchemma } from "../models/User.js";
 
 export async function validSchemaUser(req, res, next) {
     const user = req.body;
