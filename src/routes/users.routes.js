@@ -1,5 +1,8 @@
 import { Router } from "express";
+import authValidation from "../middlewares/authValidation";
 
-const router = Router();
+const router = Router()
 
-export default router;
+router.use(authValidation)
+
+router.get("/users/:name", sendUsersNamesImages)
