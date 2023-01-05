@@ -1,8 +1,15 @@
+import { connectionDB } from "../database/db.js";
+
 export async function likePost(req, res){
     const {authorization} = req.headers;
+    const postId = req.params.id;
 
     if(!authorization){
         return res.sendStatus(401);
+    }
+
+    if(!postId){
+        return res.sendStatus(404);
     }
 
     try{
@@ -19,7 +26,13 @@ export async function likePost(req, res){
             return res.sendStatus(401);
         };
 
-        return res.send()
+        const userId = session.rows[0].user_id;
+
+        await connectionDB.query(`
+        INSERT INTO likes (user_id, post_id) VALUES ($1, $2)
+        `, [userId, postId])
+
+        return res.sendStatus(201);
     } catch(err){
         console.log(err);
         res.status(500).send(err.message);
@@ -28,9 +41,14 @@ export async function likePost(req, res){
 
 export async function removeLike(req, res){
     const {authorization} = req.headers;
+    const postId = req.params.id;
 
     if(!authorization){
         return res.sendStatus(401);
+    }
+
+    if(!postId){
+        return res.sendStatus(404);
     }
 
     try{
