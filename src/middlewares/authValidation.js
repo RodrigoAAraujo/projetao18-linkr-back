@@ -23,6 +23,8 @@ export default async function authValidation(req, res, next){
             return
         }
 
+        res.locals.session = session.rows[0]
+
         next()
 
     }catch(err){
