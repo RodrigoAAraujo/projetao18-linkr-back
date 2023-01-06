@@ -1,4 +1,5 @@
 import { userLogSchemma, userRegSchemma } from "../models/User.js";
+import { connectionDB } from "../database/db.js";
 
 export async function validSchemaUser(req, res, next) {
     const user = req.body;
@@ -38,6 +39,8 @@ export async function validSchemaUser(req, res, next) {
 
 export async function validLoginSchema(req, res, next) {
     const user = req.body;
+
+    console.log(user)
   
     const { error } = userLogSchemma.validate(user, { abortEarly: false });
   

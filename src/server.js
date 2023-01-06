@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(userRoutes)
 setTimeout(() => {
    Refresh(25000) 
-}, 30000);
+}, 3000000);
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`Server running in port: ${port}`));

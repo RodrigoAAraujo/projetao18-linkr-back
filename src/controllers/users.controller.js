@@ -24,8 +24,6 @@ export async function login(req, res) {
     const { password } = res.locals.user;
     const dbUser = res.locals.dbUser
 
-
-
     const compare = bcrypt.compareSync(password, dbUser.password);
   
     if(!compare){
@@ -53,7 +51,10 @@ export async function login(req, res) {
   
   
 export async function sessionRenew(req, res) {
+    console.log("aqui")
     let session = res.locals.session
+
+    console.log(session)
       try {
         await connectionDB.query(
             `UPDATE sessions
@@ -61,6 +62,9 @@ export async function sessionRenew(req, res) {
             WHERE token = $2;`,
             [Date.now(), session.id]
         );
+
+        res.sendStatus(200)
+        return
     
       } catch (err) {
         res.status(500).send(err.message);
