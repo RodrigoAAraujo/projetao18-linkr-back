@@ -1,7 +1,6 @@
 import { connectionDB } from "../database/db.js";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from 'uuid';
-import { getUsersByName } from "../repository/users.repository.js";
 
 export async function create(req, res) {
   const { email, username, password, image_url } = res.locals.user;
@@ -23,9 +22,7 @@ export async function create(req, res) {
 export async function login(req, res) {
     const { password } = res.locals.user;
     const dbUser = res.locals.dbUser
-
-
-
+  
     const compare = bcrypt.compareSync(password, dbUser.password);
   
     if(!compare){
@@ -58,28 +55,28 @@ export async function sessionRenew(req, res) {
         await connectionDB.query(
             `UPDATE sessions
             SET created_at = $1
-            WHERE token = $2;`,
+            WHERE id = $2;`,
             [Date.now(), session.id]
         );
-    
+        res.sendStatus(200);
       } catch (err) {
         res.status(500).send(err.message);
       }
 }
 
 export async function sendUsersNamesImages(req, res){
-    const {name} = req.params
+  const {name} = req.params
 
-    try{
-        const users = await getUsersByName(name)
+  try{
+      const users = await getUsersByName(name)
 
-        console.log(users)
+      console.log(users)
 
-        res.send(users.rows)
-        return
+      res.send(users.rows)
+      return
 
-    } catch(err){
-        console.log(err);
-        res.status(500).send(err.message);
-    }
+  } catch(err){
+      console.log(err);
+      res.status(500).send(err.message);
+  }
 }
