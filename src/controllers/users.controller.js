@@ -75,8 +75,10 @@ export async function sendUsersNamesImages(req, res){
       res.send(users.rows)
       return
 
-  } catch(err){
-      console.log(err);
-      res.status(500).send(err.message);
-  }
+    } catch(err){
+        console.log(err);
+        res.status(500).send(err.message);
+    }
 }
+
+
