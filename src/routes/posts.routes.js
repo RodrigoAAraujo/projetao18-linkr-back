@@ -3,7 +3,7 @@ import { likePost, removeLike } from "../controllers/posts.controller.js";
 
 const router = Router();
 
-router.post("/posts/like/:id", likePost)
-router.delete("posts/deletelike", removeLike)
+router.post("/posts/like/:id", likePost);
+router.delete("/posts/removelike/:id", removeLike);
 
 export default router;

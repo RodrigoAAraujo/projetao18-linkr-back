@@ -65,7 +65,25 @@ export async function removeLike(req, res){
             return res.sendStatus(401);
         };
 
-        return res.send()
+        const userId = session.rows[0].user_id;
+
+        const infoLike = await connectionDB.query(`
+        SELECT * FROM likes WHERE user_id = $1 AND post_id = $2; 
+        `, [userId, postId]);
+
+        if(infoLike.rows.length === 0){
+            return res.sendStatus(404);
+        }
+
+        if(infoLike.rows[0].user_id !== userId){
+            return res.sendStatus(401);
+        }        
+
+        await connectionDB.query(`
+            DELETE FROM likes WHERE user_id = $1 AND post_id = $2; 
+        `, [userId, postId])
+
+        return res.sendStatus(204)
     } catch(err){
         console.log(err);
         res.status(500).send(err.message);
