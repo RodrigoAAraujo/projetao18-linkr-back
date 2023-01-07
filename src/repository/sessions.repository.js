@@ -1,5 +1,14 @@
 import { connectionDB } from "../database/db.js";
 
-export function validateToken(token){
-    return connectionDB.query(`SELECT * FROM session WHERE token=$1`, [token])
+export async function validateToken(token){
+
+    try{
+        const session = await connectionDB.query(`SELECT * FROM sessions WHERE token=$1`, [token])
+
+        return session
+    }catch(err){
+ 
+        res.status(500).send(err.message);
+    
+    }
 }

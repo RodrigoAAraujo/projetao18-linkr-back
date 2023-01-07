@@ -51,10 +51,8 @@ export async function login(req, res) {
   
   
 export async function sessionRenew(req, res) {
-    console.log("aqui")
     let session = res.locals.session
 
-    console.log(session)
       try {
         await connectionDB.query(
             `UPDATE sessions

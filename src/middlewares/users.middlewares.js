@@ -39,8 +39,6 @@ export async function validSchemaUser(req, res, next) {
 
 export async function validLoginSchema(req, res, next) {
     const user = req.body;
-
-    console.log(user)
   
     const { error } = userLogSchemma.validate(user, { abortEarly: false });
   
