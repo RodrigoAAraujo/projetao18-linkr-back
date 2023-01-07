@@ -75,8 +75,6 @@ export async function sendUsersNamesImages(req, res){
     try{
         const users = await getUsersByName(name)
 
-        console.log(users)
-
         res.send(users.rows)
         return
 
