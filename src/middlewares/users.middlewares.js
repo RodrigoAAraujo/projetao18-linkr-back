@@ -1,3 +1,4 @@
+import { connectionDB } from "../database/db.js";
 import { userLogSchemma, userRegSchemma } from "../models/User.js";
 import { connectionDB } from "../database/db.js";
 

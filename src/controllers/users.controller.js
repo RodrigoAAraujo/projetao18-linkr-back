@@ -1,7 +1,6 @@
 import { connectionDB } from "../database/db.js";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from 'uuid';
-import { getUsersByName } from "../repository/users.repository.js";
 
 export async function create(req, res) {
   const { email, username, password, image_url } = res.locals.user;
@@ -57,23 +56,24 @@ export async function sessionRenew(req, res) {
         await connectionDB.query(
             `UPDATE sessions
             SET created_at = $1
-            WHERE token = $2;`,
+            WHERE id = $2;`,
             [Date.now(), session.id]
         );
 
         res.sendStatus(200)
         return
     
+
       } catch (err) {
         res.status(500).send(err.message);
       }
 }
 
 export async function sendUsersNamesImages(req, res){
-    const {name} = req.params
+  const {name} = req.params
 
-    try{
-        const users = await getUsersByName(name)
+  try{
+      const users = await getUsersByName(name)
 
         res.send(users.rows)
         return
@@ -83,3 +83,5 @@ export async function sendUsersNamesImages(req, res){
         res.status(500).send(err.message);
     }
 }
+
+

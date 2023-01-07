@@ -1,5 +1,6 @@
 import { connectionDB } from "../database/db.js";
 
+
 export async function validateToken(token){
 
     try{
@@ -7,8 +8,7 @@ export async function validateToken(token){
 
         return session
     }catch(err){
- 
         res.status(500).send(err.message);
-    
+        return
     }
 }
