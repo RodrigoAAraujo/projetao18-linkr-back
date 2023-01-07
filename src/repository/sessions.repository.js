@@ -7,8 +7,7 @@ export async function validateToken(token){
 
         return session
     }catch(err){
- 
         res.status(500).send(err.message);
-    
+        return
     }
 }

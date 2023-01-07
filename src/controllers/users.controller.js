@@ -59,8 +59,12 @@ export async function sessionRenew(req, res) {
             WHERE id = $2;`,
             [Date.now(), session.id]
         );
-        res.sendStatus(200);
+
+
+
+        res.sendStatus(200)
         return
+    
       } catch (err) {
         res.status(500).send(err.message);
       }
@@ -72,8 +76,9 @@ export async function sendUsersNamesImages(req, res){
   try{
       const users = await getUsersByName(name)
 
-      res.send(users.rows)
-      return
+
+        res.send(users.rows)
+        return
 
     } catch(err){
         console.log(err);
