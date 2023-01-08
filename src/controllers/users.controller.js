@@ -59,9 +59,7 @@ export async function sessionRenew(req, res) {
             WHERE id = $2;`,
             [Date.now(), session.id]
         );
-
-
-
+        
         res.sendStatus(200)
         return
     
