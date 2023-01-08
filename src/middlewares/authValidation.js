@@ -15,7 +15,7 @@ export default async function authValidation(req, res, next){
 
     const token = authorization.replace("Bearer ", "")
 
-    try{
+    try{      
         const session = await validateToken(token)
 
         if(session.rowCount === 0){
