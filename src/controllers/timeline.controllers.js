@@ -1,4 +1,4 @@
-import { connectionDB } from "../database/db.js";
+import { connection } from "../database/db.js";
 import urlMetadata from "url-metadata";
 import joi from "joi";
 
@@ -22,13 +22,13 @@ export async function postPosts(req, res){
         return;
     }
 
-    //const verificaToken = connectionDB.query("SELECT * FROM sessions WHERE token=$1;", [token]);
+    //const verificaToken = connection.query("SELECT * FROM sessions WHERE token=$1;", [token]);
     //if(verificaToken.rows.lenght === 0){console.log("token inválido ou nao encontrado") res.sendStatus(400) return};
     //const userId = verificaToken.rows.[0].userId;
 
     try {
         
-        //await connectionDB.query('INSERT INTO posts (link, comentary, "userId") VALUES ($1, $2, $3);', [post.link, post.comentary, userId]);
+        //await connection.query('INSERT INTO posts (link, comentary, "userId") VALUES ($1, $2, $3);', [post.link, post.comentary, userId]);
         console.log("post inserido")
         res.sendStatus(200);
         return
@@ -50,19 +50,19 @@ export async function getPosts(req, res){
     const { authorization } = req.headers;
     const token = authorization?.replace("Bearer ", "");
 
-    //const verificaToken = connectionDB.query("SELECT * FROM sessions WHERE token=$1;", [token]);
+    //const verificaToken = connection.query("SELECT * FROM sessions WHERE token=$1;", [token]);
     //if(verificaToken.rows.lenght === 0){console.log("token inválido ou nao encontrado") res.sendStatus(400) return};
 
     try {
         
-        const posts = await connectionDB.query('SELECT * FROM posts LIMIT 20');
+        const posts = await connection.query('SELECT * FROM posts LIMIT 20');
         const postsReverse = posts.rows.reverse()
         for(let c = 0; c < postsReverse.length; c++){
 
             const userId = postsReverse[c].userId;
             const link = postsReverse[c].link;
             const comentary = postsReverse[c].comentary;
-            const user = await connectionDB.query('SELECT * FROM users WHERE id=$1;', [userId]);
+            const user = await connection.query('SELECT * FROM users WHERE id=$1;', [userId]);
             const imgUrl = user.rows[0].image_url;
             const name = user.rows[0].username;
 
@@ -102,7 +102,7 @@ export async function getPosts(req, res){
 
 export async function teste(req, res){
     try {
-        const query = connectionDB.query('SELECT * FROM users WHERE id=1;');
+        const query = connection.query('SELECT * FROM users WHERE id=1;');
         console.log(query.rows[0]);
         res.sendStatus(200);
         return;

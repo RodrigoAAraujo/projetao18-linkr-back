@@ -8,8 +8,10 @@ const router = Router()
 
 router.post("/signup", validSchemaUser, create)
 router.post("/signin", validLoginSchema, login)
-router.post("/renew", authValidation, sessionRenew)
-router.get("/users/:name", authValidation, sendUsersNamesImages)
+
+
+router.post("/renew", authValidation,sessionRenew)
+router.get("/users/:name",authValidation, sendUsersNamesImages)
 
 
 export default router

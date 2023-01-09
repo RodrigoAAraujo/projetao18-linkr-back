@@ -1,4 +1,4 @@
-import { connectionDB } from "../database/db.js";
+import { connection } from "../database/db.js";
 import urlMetadata from "url-metadata";
 
 export async function likePost(req, res) {
@@ -19,7 +19,7 @@ export async function likePost(req, res) {
             return res.sendStatus(401);
         }
 
-        const session = await connectionDB.query(`
+        const session = await connection.query(`
         SELECT * FROM sessions WHERE token = $1
         `, [token]);
 
@@ -29,7 +29,7 @@ export async function likePost(req, res) {
 
         const userId = session.rows[0].user_id;
 
-        await connectionDB.query(`
+        await connection.query(`
         INSERT INTO likes (user_id, post_id) VALUES ($1, $2)
         `, [userId, postId])
 
@@ -58,7 +58,7 @@ export async function removeLike(req, res) {
             return res.sendStatus(401);
         }
 
-        const session = await connectionDB.query(`
+        const session = await connection.query(`
         SELECT * FROM sessions WHERE token = $1
         `, [token]);
 
@@ -68,7 +68,7 @@ export async function removeLike(req, res) {
 
         const userId = session.rows[0].user_id;
 
-        const infoLike = await connectionDB.query(`
+        const infoLike = await connection.query(`
         SELECT * FROM likes WHERE user_id = $1 AND post_id = $2; 
         `, [userId, postId]);
 
@@ -80,7 +80,7 @@ export async function removeLike(req, res) {
             return res.sendStatus(401);
         }
 
-        await connectionDB.query(`
+        await connection.query(`
             DELETE FROM likes WHERE user_id = $1 AND post_id = $2; 
         `, [userId, postId])
 
@@ -105,7 +105,7 @@ export async function verifyLike(req, res){
             return res.sendStatus(401);
         }
 
-        const session = await connectionDB.query(`
+        const session = await connection.query(`
         SELECT * FROM sessions WHERE token = $1
         `, [token]);
 
@@ -115,14 +115,14 @@ export async function verifyLike(req, res){
 
         const userId = session.rows[0].user_id;
 
-        const postInfo = await connectionDB.query(`
+        const postInfo = await connection.query(`
             SELECT user_id as "id", u.username
             FROM likes l
             JOIN users u ON l.user_id=u.id
             WHERE l.post_id = $1
         `, [postId])
 
-        const userLike = await connectionDB.query(`
+        const userLike = await connection.query(`
             SELECT * FROM likes WHERE user_id = $1 AND post_id = $2
         `, [userId, postId]);
 
