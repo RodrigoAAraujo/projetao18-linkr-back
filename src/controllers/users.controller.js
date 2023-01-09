@@ -1,6 +1,7 @@
 import { connectionDB } from "../database/db.js";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from 'uuid';
+import {getUsersByName} from '../repository/users.repository.js'
 
 export async function create(req, res) {
   const { email, username, password, image_url } = res.locals.user;
