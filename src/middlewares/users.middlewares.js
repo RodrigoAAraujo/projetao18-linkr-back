@@ -1,4 +1,4 @@
-import { connectionDB } from "../database/db.js";
+import { connection } from "../database/db.js";
 import { userLogSchemma, userRegSchemma } from "../models/User.js";
 
 export async function validSchemaUser(req, res, next) {
@@ -12,7 +12,7 @@ export async function validSchemaUser(req, res, next) {
     }
 
     //Check Username taken
-    const userExists = await connectionDB.query(
+    const userExists = await connection.query(
         "SELECT * FROM users WHERE username=$1",
         [user.username]
     );
@@ -22,7 +22,7 @@ export async function validSchemaUser(req, res, next) {
     }
   
     //Check Email taken
-    const emailExists = await connectionDB.query(
+    const emailExists = await connection.query(
         "SELECT * FROM users WHERE email=$1",
         [user.email]
     );
@@ -46,7 +46,7 @@ export async function validLoginSchema(req, res, next) {
       const errors = error.details.map((detail) => detail.message);
       return res.status(422).send({ errors });
     }
-    const userExists = await connectionDB.query(
+    const userExists = await connection.query(
       "SELECT * FROM users WHERE email=$1",
       [user.email]
     );

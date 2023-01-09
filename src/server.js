@@ -12,13 +12,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use(postsRoutes);
 app.use(userRoutes);
 app.use(timelineRoutes);
+app.use(postsRoutes);
 
-//setInterval(() => {
-   //Refresh(60000) //900000
-//}, 15000); //120000
+setInterval(() => {
+   Refresh(60000) //900000
+}, 15000); //120000
 
 const port = process.env.PORT || 4000;
 app.listen(port, () => console.log(`Server running in port: ${port}`));
