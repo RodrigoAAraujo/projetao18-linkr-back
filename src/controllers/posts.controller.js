@@ -132,6 +132,7 @@ export async function verifyLike(req, res){
         }
 
         return res.send({
+            "userId": userId,
             "userLikedThisPost": userLiked,
             "likes": postInfo.rows
         })
