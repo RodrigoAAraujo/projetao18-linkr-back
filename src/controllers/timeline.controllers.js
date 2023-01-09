@@ -47,8 +47,8 @@ export async function getPosts(req, res){
     let arrTimeline = [];
     let dadosLink;
 
-    const { authorization } = req.headers;
-    const token = authorization?.replace("Bearer ", "");
+    //const { authorization } = req.headers;
+    //const token = authorization?.replace("Bearer ", "");
 
     //const verificaToken = connectionDB.query("SELECT * FROM sessions WHERE token=$1;", [token]);
     //if(verificaToken.rows.lenght === 0){console.log("token inválido ou nao encontrado") res.sendStatus(400) return};
