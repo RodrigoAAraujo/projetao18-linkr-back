@@ -13,6 +13,7 @@ app.use(express.json());
 
 app.use(postsRoutes);
 app.use(userRoutes);
+
 setInterval(() => {
    Refresh(60000) //900000
 }, 15000); //120000

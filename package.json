@@ -2,7 +2,7 @@
   "name": "projetao18-linkr-back",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "dev": "npx nodemon ./src/server.js",
@@ -29,6 +29,7 @@
     "express": "^4.18.2",
     "joi": "^17.7.0",
     "pg": "^8.8.0",
+    "url-metadata": "^2.5.0",
     "uuid": "^9.0.0"
   }
 }
