@@ -15,7 +15,7 @@ export async function Refresh(timeout){
 
             console.log("Session finished within user id: "+session.user_id)
           } catch (error) {
-              console.log(error)
+              console.log(error, "erro no try/catch de refresh")
           }
     })
 }
