@@ -1,4 +1,4 @@
-import { connectionDB } from "../database/db.js";
+import { connection } from "../database/db.js";
 import bcrypt from "bcrypt";
 import { v4 as uuidv4 } from 'uuid';
 import { getUsersByName } from "../repository/users.repository.js";
@@ -9,7 +9,7 @@ export async function create(req, res) {
   const hashedPass = bcrypt.hashSync(password, 10);
 
   try {
-    await connectionDB.query(
+    await connection.query(
       "INSERT INTO users (email, username, password, image_url ) VALUES ($1, $2, $3, $4)",
       [email, username, hashedPass, image_url]
     );
@@ -32,7 +32,7 @@ export async function login(req, res) {
     const uniqueUID = uuidv4();
     
     try {
-      await connectionDB.query(`
+      await connection.query(`
       INSERT INTO sessions
       ("token", "user_id", "created_at")
       VALUES ($1, $2, $3);
@@ -53,7 +53,7 @@ export async function sessionRenew(req, res) {
     let session = res.locals.session
 
       try {
-        await connectionDB.query(
+        await connection.query(
             `UPDATE sessions
             SET created_at = $1
             WHERE id = $2;`,
