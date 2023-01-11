@@ -1,0 +1,58 @@
+CREATE TABLE users (
+	id SERIAL PRIMARY KEY,
+	username TEXT NOT NULL UNIQUE,
+	email TEXT NOT NULL UNIQUE,
+	password TEXT NOT NULL,
+	image_url TEXT NOT NULL
+);
+
+CREATE TABLE sessions(
+	id SERIAL PRIMARY KEY,
+	token TEXT NOT NULL,
+	user_id INTEGER NOT NULL REFERENCES users(id),
+	created_at BIGINT NOT NULL
+);
+
+CREATE TABLE posts (
+	id SERIAL PRIMARY KEY,
+	link TEXT NOT NULL,
+	comentary TEXT NOT NULL,
+	user_id INTEGER NOT NULL REFERENCES users(id),
+	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+	edited_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE hashtags(
+	id SERIAL PRIMARY KEY,
+	name TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE posts_hashtags(
+	id SERIAL PRIMARY KEY,
+	hashtag_id INTEGER NOT NULL REFERENCES hashtags(id),
+	posts_id INTEGER NOT NULL REFERENCES posts(id)
+);
+
+CREATE TABLE likes(
+	id SERIAL PRIMARY KEY,
+	user_id INTEGER NOT NULL REFERENCES users(id),
+	post_id INTEGER NOT NULL REFERENCES posts(id)
+);
+
+
+
+CREATE TABLE comments (
+	id SERIAL PRIMARY KEY,
+	user_id INTEGER NOT NULL REFERENCES users(id), 
+	comment TEXT NOT NULL, 
+	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+	post_id INTEGER NOT NULL REFERENCES posts(id)
+);
+
+CREATE TABLE followers (
+	id SERIAL PRIMARY KEY, 
+	follower_id INTEGER NOT NULL REFERENCES users(id), 
+	followed_id INTEGER NOT NULL REFERENCES users(id), 
+	UNIQUE (followed_id, follower_id), 
+	created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);

@@ -4,41 +4,35 @@ import joi from "joi";
 
 const postSchema = joi.object({
     link: joi.string().required().min(1),
-    description: joi.string(),
-    token: joi.required()
+    comentary: joi.string(),
 });
 
 export async function postPosts(req, res){
- 
     const post = req.body;
-    //const { authorization } = req.headers;
-    //const token = authorization?.replace("Bearer ", "");
-
+    const { authorization } = req.headers;
+    const token = authorization?.replace("Bearer ", "");
     const { error } = postSchema.validate(post, { abortEarly: false });
     if (error) {
         const errors = error.details.map((details) => details.message);
         console.log(errors, "postSchema inválido");
-        res.status(400).send(errors);
-        return;
-    }
-
-    //const verificaToken = connection.query("SELECT * FROM sessions WHERE token=$1;", [token]);
-    //if(verificaToken.rows.lenght === 0){console.log("token inválido ou nao encontrado") res.sendStatus(400) return};
-    //const userId = verificaToken.rows.[0].userId;
-
+        return res.status(400).send(errors);
+    };
     try {
-        console.log(post.link, post.description)
-        await connection.query('INSERT INTO posts (link, description, "userId") VALUES ($1, $2, $3);', [post.link, post.description, 1]);
-        console.log("post inserido")
-        res.sendStatus(200);
-        return
-
+        const verificaToken = await connection.query("SELECT * FROM sessions WHERE token=$1;", [token]);
+        if(verificaToken.rowCount === 0){
+            console.log("token inválido ou nao encontrado");
+            return res.sendStatus(400);
+        };
+        console.log("token válido");
+        const userId = verificaToken.rows[0].user_id;
+        console.log(post.link, post.comentary)
+        await connection.query('INSERT INTO posts (link, comentary, user_id) VALUES ($1, $2, $3);', [post.link, post.comentary, userId]);
+        console.log("post inserido");
+        return res.sendStatus(200);
     } catch (error) {
         console.log(error, "erro no try/catch de postPosts");
-        res.sendStatus(500)
+        res.sendStatus(500);
     }
-
-
 }
 
 export async function getPosts(req, res){
