@@ -43,7 +43,7 @@ export async function postPosts(req, res){
 
 export async function getPosts(req, res){
 
-
+    console.log("oi")
     let arrTimeline = [];
     let dadosLink;
 
@@ -57,9 +57,12 @@ export async function getPosts(req, res){
         
         const posts = await connection.query('SELECT * FROM posts LIMIT 20');
         const postsReverse = posts.rows.reverse()
-        for(let c = 0; c < postsReverse.length; c++){
+        
+        for (let c = 0; c < postsReverse.length; c++) {
 
+            console.log(postsReverse)
             const userId = postsReverse[c].userId;
+            const postId = postsReverse[c].id;
             const link = postsReverse[c].link;
             const comentary = postsReverse[c].comentary;
             const user = await connection.query('SELECT * FROM users WHERE id=$1;', [userId]);
@@ -69,6 +72,23 @@ export async function getPosts(req, res){
             urlMetadata(link).then(
                 function (metadata) {
                     dadosLink = metadata;
+                    const newBody = {
+                        id: postId,
+                        name: name,
+                        comentary: comentary,
+                        img: imgUrl,
+                        metadata: dadosLink
+                    }
+        
+                    arrTimeline.push(newBody);
+        
+                    console.log(arrTimeline)
+                    
+                    if (c === (postsReverse.length - 1)) {
+        
+                        res.send(arrTimeline);
+                        return
+                    }
                 },
                 function (error) {
                     console.log(error);
@@ -76,20 +96,7 @@ export async function getPosts(req, res){
                     return
                 })
 
-                const newBody = {
-                    name: name,
-                    comentary: comentary,
-                    img: imgUrl,
-                    metadata: dadosLink
-                }
-
-                arrTimeline.push(newBody);
-
-                if(c === (postsReverse.lenght - 1)){
-                    
-                    res.send(arrTimeline);
-                    return
-                }
+            
 
         }
 
