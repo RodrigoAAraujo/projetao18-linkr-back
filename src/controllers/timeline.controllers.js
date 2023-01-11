@@ -2,34 +2,17 @@ import { connection } from "../database/db.js";
 import urlMetadata from "url-metadata";
 import joi from "joi";
 
-const postSchema = joi.object({
-    link: joi.string().required().min(1),
-    description: joi.string(),
-    token: joi.required()
-});
 
-export async function postPosts(req, res){
- 
+export async function postPosts(req, res) {
+
     const post = req.body;
     const { authorization } = req.headers;
     const token = authorization?.replace("Bearer ", "");
 
-    const { error } = postSchema.validate(post, { abortEarly: false });
-    if (error) {
-        const errors = error.details.map((details) => details.message);
-        console.log(errors, "postSchema inválido");
-        res.status(400).send(errors);
-        return;
-    }
-
-    //const verificaToken = connection.query("SELECT * FROM sessions WHERE token=$1;", [token]);
-    //if(verificaToken.rows.lenght === 0){console.log("token inválido ou nao encontrado") res.sendStatus(400) return};
-    //const userId = verificaToken.rows.[0].userId;
-
     try {
-        
-        //await connection.query('INSERT INTO posts (link, comentary, "userId") VALUES ($1, $2, $3);', [post.link, post.comentary, userId]);
-        console.log("post inserido")
+        const userId = await connection.query("SELECT user_id FROM sessions WHERE token=$1", [token])
+        await connection.query('INSERT INTO posts (link, comentary, user_id) VALUES ($1, $2, $3);', [post.link, post.commentary, userId.rows[0].user_id]);
+
         res.sendStatus(200);
         return
 
@@ -41,7 +24,7 @@ export async function postPosts(req, res){
 
 }
 
-export async function getPosts(req, res){
+export async function getPosts(req, res) {
 
 
     let arrTimeline = [];
@@ -54,45 +37,11 @@ export async function getPosts(req, res){
     //if(verificaToken.rows.lenght === 0){console.log("token inválido ou nao encontrado") res.sendStatus(400) return};
 
     try {
-        
-        const posts = await connection.query('SELECT * FROM posts LIMIT 20');
-        const postsReverse = posts.rows.reverse()
-        for(let c = 0; c < postsReverse.length; c++){
 
-            const userId = postsReverse[c].userId;
-            const link = postsReverse[c].link;
-            const comentary = postsReverse[c].comentary;
-            const user = await connection.query('SELECT * FROM users WHERE id=$1;', [userId]);
-            const imgUrl = user.rows[0].image_url;
-            const name = user.rows[0].username;
-
-            urlMetadata(link).then(
-                function (metadata) {
-                    dadosLink = metadata;
-                },
-                function (error) {
-                    console.log(error);
-                    res.send(error);
-                    return
-                })
-
-                const newBody = {
-                    name: name,
-                    comentary: comentary,
-                    img: imgUrl,
-                    metadata: dadosLink
-                }
-
-                arrTimeline.push(newBody);
-
-                if(c === (postsReverse.lenght - 1)){
-                    
-                    res.send(arrTimeline);
-                    return
-                }
-
-        }
-
+        const posts = await connection.query('SELECT * FROM posts JOIN users ON posts.user_id = users.id LIMIT 20');
+        res.send(posts.rows)
+        return
+    
     } catch (error) {
         console.log(error, "erro no try/catch de getPosts");
         res.sendStatus(500);
@@ -100,7 +49,7 @@ export async function getPosts(req, res){
     }
 }
 
-export async function teste(req, res){
+export async function teste(req, res) {
     try {
         const query = connection.query('SELECT * FROM users WHERE id=1;');
         console.log(query.rows[0]);

@@ -3,8 +3,6 @@ import {validateToken} from "../repository/sessions.repository.js"
 export default async function authValidation(req, res, next){
     const {authorization} = req.headers
 
-    console.log(authorization)
-
     if(!authorization){
         res.sendStatus(400)
         return
@@ -24,6 +22,8 @@ export default async function authValidation(req, res, next){
             res.sendStatus(404)
             return
         }
+
+        res.locals.session = session.rows[0]
 
         next()
 
