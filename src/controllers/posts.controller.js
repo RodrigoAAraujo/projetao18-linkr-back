@@ -1,5 +1,6 @@
 import { connection } from "../database/db.js";
 import urlMetadata from "url-metadata";
+import { getPostsByUserId } from "../repository/posts.repository.js";
 
 export async function likePost(req, res) {
     const { authorization } = req.headers;
@@ -161,6 +162,20 @@ export async function sendMetaData(req, res) {
             })
 
     } catch (err) {
+        console.log(err);
+        res.status(500).send(err.message);
+    }
+}
+
+export async function sendUserPosts(req, res){
+    const {id} = req.params
+
+    try{
+        const userPosts = await getPostsByUserId(id)
+
+        res.send(userPosts)
+        return
+    }catch(err) {
         console.log(err);
         res.status(500).send(err.message);
     }
