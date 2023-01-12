@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/users.routes.js"
 import postsRoutes from "./routes/posts.routes.js"
 import timelineRoutes from "./routes/timeline.routes.js"
-
 import { Refresh } from "./refresh.js";
 dotenv.config();
 
