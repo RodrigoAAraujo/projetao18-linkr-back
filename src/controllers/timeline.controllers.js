@@ -5,7 +5,7 @@ import { insertHashtags } from "./hashtags.controller.js";
 
 const postSchema = joi.object({
     link: joi.string().required().min(1),
-    comentary: joi.string(),
+    commentary: joi.string(),
 });
 
 export async function postPosts(req, res){
