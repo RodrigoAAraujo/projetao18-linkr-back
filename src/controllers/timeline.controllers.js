@@ -29,7 +29,7 @@ export async function getPosts(req, res) {
 
     try {
 
-        const posts = await connection.query('SELECT * FROM posts JOIN users ON posts.user_id = users.id LIMIT 20');
+        const posts = await connection.query('SELECT * FROM users JOIN posts ON posts.user_id = users.id ');
         res.send(posts.rows)
         return
     
