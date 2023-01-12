@@ -11,7 +11,6 @@ export async function postPosts(req, res){
 
     try {
         const verificaToken = await connection.query("SELECT * FROM sessions WHERE token=$1;", [token]);
-
         const userId = verificaToken.rows[0].user_id;
         await connection.query('INSERT INTO posts (link, comentary, user_id) VALUES ($1, $2, $3);', [post.link, post.comentary, userId]);
         const selection = await connection.query(`SELECT * FROM posts WHERE user_id=$1;`, [userId]);
