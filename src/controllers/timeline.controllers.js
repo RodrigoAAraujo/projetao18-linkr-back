@@ -1,40 +1,31 @@
 import { connection } from "../database/db.js";
 import urlMetadata from "url-metadata";
 import joi from "joi";
+import { insertHashtags } from "./hashtags.controller.js";
 
 
-export async function postPosts(req, res) {
-
+export async function postPosts(req, res){
     const post = req.body;
     const { authorization } = req.headers;
     const token = authorization?.replace("Bearer ", "");
 
     try {
-        const userId = await connection.query("SELECT user_id FROM sessions WHERE token=$1", [token])
-        await connection.query('INSERT INTO posts (link, comentary, user_id) VALUES ($1, $2, $3);', [post.link, post.commentary, userId.rows[0].user_id]);
+        const verificaToken = await connection.query("SELECT * FROM sessions WHERE token=$1;", [token]);
 
-        res.sendStatus(200);
-        return
-
+        const userId = verificaToken.rows[0].user_id;
+        await connection.query('INSERT INTO posts (link, comentary, user_id) VALUES ($1, $2, $3);', [post.link, post.comentary, userId]);
+        const selection = await connection.query(`SELECT * FROM posts WHERE user_id=$1;`, [userId]);
+        const postId = selection.rows[selection.rows.length-1].id;
+        console.log("post inserido");
+        insertHashtags(post.comentary, postId);
+        return res.sendStatus(200);
     } catch (error) {
         console.log(error, "erro no try/catch de postPosts");
-        res.sendStatus(500)
+        res.sendStatus(500);
     }
-
-
-}
+};
 
 export async function getPosts(req, res) {
-
-
-    let arrTimeline = [];
-    let dadosLink;
-
-    const { authorization } = req.headers;
-    const token = authorization?.replace("Bearer ", "");
-
-    //const verificaToken = connection.query("SELECT * FROM sessions WHERE token=$1;", [token]);
-    //if(verificaToken.rows.lenght === 0){console.log("token inválido ou nao encontrado") res.sendStatus(400) return};
 
     try {
 
@@ -44,8 +35,7 @@ export async function getPosts(req, res) {
     
     } catch (error) {
         console.log(error, "erro no try/catch de getPosts");
-        res.sendStatus(500);
-        return
+        return res.sendStatus(500);
     }
 }
 

@@ -8,6 +8,5 @@ const router = Router()
 
 router.get("/timeline", authValidation, getPosts)
 router.post("/timeline",authValidation, validatePost, postPosts)
-//router.get("/timeline", teste)
 
 export default router

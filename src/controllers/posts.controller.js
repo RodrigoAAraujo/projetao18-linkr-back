@@ -49,6 +49,7 @@ export async function removeLike(req, res) {
         return res.sendStatus(401);
     }
 
+    console.log(postId, "postId")
     if (!postId) {
         return res.sendStatus(404);
     }
@@ -69,6 +70,7 @@ export async function removeLike(req, res) {
 
         const userId = session.rows[0].user_id;
 
+        console.log(userId, postId)
         const infoLike = await connection.query(`
         SELECT * FROM likes WHERE user_id = $1 AND post_id = $2; 
         `, [userId, postId]);
