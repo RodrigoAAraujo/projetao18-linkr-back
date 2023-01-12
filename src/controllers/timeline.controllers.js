@@ -6,6 +6,7 @@ import { insertHashtags } from "./hashtags.controller.js";
 
 export async function postPosts(req, res){
     const post = req.body;
+    console.log(post)
     const { authorization } = req.headers;
     const token = authorization?.replace("Bearer ", "");
 
@@ -29,7 +30,7 @@ export async function getPosts(req, res) {
 
     try {
 
-        const posts = await connection.query('SELECT * FROM users JOIN posts ON posts.user_id = users.id ');
+        const posts = await connection.query('SELECT * FROM users JOIN posts ON posts.user_id = users.id ORDER BY created_at DESC');
         res.send(posts.rows)
         return
     
