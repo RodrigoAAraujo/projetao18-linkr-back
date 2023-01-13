@@ -49,7 +49,6 @@ export async function removeLike(req, res) {
         return res.sendStatus(401);
     }
 
-    console.log(postId, "postId")
     if (!postId) {
         return res.sendStatus(404);
     }
@@ -144,8 +143,7 @@ export async function verifyLike(req, res){
         console.log(err);
         res.status(500).send(err.message);
     }
-}
-        
+}     
 
 export async function sendMetaData(req, res) {
     const { link } = req.body
@@ -167,6 +165,51 @@ export async function sendMetaData(req, res) {
     }
 }
 
+export async function addComment(req, res){
+    const { authorization } = req.headers;
+    const {postId, userId, comment} = req.body;
+
+    if (!authorization) {
+        return res.sendStatus(401);
+    }
+
+    if (!postId || !comment || !userId) {
+        return res.sendStatus(404);
+    }
+
+    try{
+        const token = authorization?.replace("Bearer ", "")
+        if (!token || token === "Bearer") {
+            return res.sendStatus(401);
+        }
+
+        const session = await connection.query(`
+        SELECT * FROM sessions WHERE token = $1
+        `, [token]);
+
+        if (!session.rows[0]) {
+            return res.sendStatus(401);
+        };
+
+        console.log(session);
+
+        if(session.rows[0].user_id !== userId){
+            return res.sendStatus(401);
+        }
+
+        await connection.query(`
+        INSERT INTO comments (user_id, comment, post_id)
+        VALUES ($1, $2, $3)
+        `, [userId, comment, postId])
+
+        return res.sendStatus(201)
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err.message);
+    }
+}
+
 export async function sendUserPosts(req, res){
     const {id} = req.params
 
@@ -176,6 +219,47 @@ export async function sendUserPosts(req, res){
         res.send(userPosts)
         return
     }catch(err) {
+        console.log(err);
+        res.status(500).send(err.message);
+    }
+}
+
+export async function loadComments(req, res){
+    const { authorization } = req.headers;
+    const postId = req.params.id;
+
+    if (!authorization) {
+        return res.sendStatus(401);
+    }
+
+    if (!postId) {
+        return res.sendStatus(404);
+    }
+
+    try{
+        const token = authorization?.replace("Bearer ", "")
+        if (!token || token === "Bearer") {
+            return res.sendStatus(401);
+        }
+
+        const session = await connection.query(`
+        SELECT * FROM sessions WHERE token = $1
+        `, [token]);
+
+        if (!session.rows[0]) {
+            return res.sendStatus(401);
+        };
+
+        const comments = await connection.query(`
+            SELECT * FROM comments WHERE post_id=$1
+        `, [postId])
+
+        return res.send({
+            "user_id" : `${session.rows[0].user_id}`,
+            "comments": comments.rows
+        })
+
+    } catch (err) {
         console.log(err);
         res.status(500).send(err.message);
     }
