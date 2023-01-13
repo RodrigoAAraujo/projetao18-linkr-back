@@ -14,6 +14,9 @@ export default async function authValidation(req, res, next){
         if(session.rowCount === 0){
             return res.sendStatus(404);
         }
+
+        res.locals.session = session.rows[0]
+
         next()
     } catch(err){
         return res.status(500).send({message: err})

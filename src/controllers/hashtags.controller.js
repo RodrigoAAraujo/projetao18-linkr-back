@@ -21,7 +21,7 @@ export async function insertHashtags(comentary, postId ){
             } else{
                 hashtagId = selection.rows[0].id;
             };
-            await connection.query('INSERT INTO posts_hashtags (hashtag_id, posts_id) VALUES ($1, $2);', [hashtagId, postId]);
+            await connection.query('INSERT INTO posts_hashtags (hashtag_id, post_id) VALUES ($1, $2);', [hashtagId, postId]);
         }
     } catch (error) {
         console.log(error);
