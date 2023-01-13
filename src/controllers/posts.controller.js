@@ -190,6 +190,8 @@ export async function addComment(req, res){
             return res.sendStatus(401);
         };
 
+        console.log(session);
+
         if(session.rows[0].user_id !== userId){
             return res.sendStatus(401);
         }
@@ -207,7 +209,6 @@ export async function addComment(req, res){
     }
 }
 
-
 export async function sendUserPosts(req, res){
     const {id} = req.params
 
@@ -224,6 +225,7 @@ export async function sendUserPosts(req, res){
 
 export async function loadComments(req, res){
     const { authorization } = req.headers;
+    const postId = req.params.id;
 
     if (!authorization) {
         return res.sendStatus(401);
@@ -234,13 +236,30 @@ export async function loadComments(req, res){
     }
 
     try{
+        const token = authorization?.replace("Bearer ", "")
+        if (!token || token === "Bearer") {
+            return res.sendStatus(401);
+        }
+
+        const session = await connection.query(`
+        SELECT * FROM sessions WHERE token = $1
+        `, [token]);
+
+        if (!session.rows[0]) {
+            return res.sendStatus(401);
+        };
+
+        const comments = await connection.query(`
+            SELECT * FROM comments WHERE post_id=$1
+        `, [postId])
+
+        return res.send(comments.rows)
 
     } catch (err) {
         console.log(err);
         res.status(500).send(err.message);
     }
 }
-
 
 export async function deletePost(req, res){
     const {id} = req.params

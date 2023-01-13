@@ -11,8 +11,8 @@ router.delete("/posts/removelike/:id", removeLike)
 router.delete("/posts/:id", deletePost)
 router.get("/posts/likes/:id", verifyLike)
 router.post("/posts/links", sendMetaData)
-router.post("/posts/addcomment", addComment)
-router.get("/posts/loadcomments", loadComments)
+router.post("/posts/comments", addComment)
+router.get("/posts/comments/:id", loadComments)
 router.get("/posts/users/:id", sendUserPosts)
 
 export default router;
