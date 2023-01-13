@@ -250,7 +250,13 @@ export async function loadComments(req, res){
         };
 
         const comments = await connection.query(`
-            SELECT * FROM comments WHERE post_id=$1
+            SELECT c.user_id, c.comment, u.id, u.username, u.image_url 
+            FROM 
+            comments c 
+            JOIN 
+            users u 
+            ON c.user_id=u.id
+            WHERE post_id=$1
         `, [postId])
 
         return res.send({
