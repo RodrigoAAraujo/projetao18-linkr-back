@@ -30,13 +30,23 @@ export async function insertHashtags(comentary, postId){
 
 export async function selectTrendingHashtags(req, res){
     try {
-        console.log("entrei");
         const result = await connection.query(
             'SELECT h.name, COUNT(p.id) AS "repetitions" FROM hashtags h JOIN posts_hashtags p ON h.id=p.hashtag_id GROUP BY h.name ORDER BY repetitions DESC;'
         );
-        res.send(result.rows);
+        res.send(result.rows)
     } catch (error) {
         console.log(error);
         res.status(500).send(`${error.name}: ${error.message}`);
     }
-}
+};
+
+export async function selectPostsWithHashtag(req, res){
+    const {hashtag} = req.params;
+    try {
+        const result = await connection.query(`SELECT posts.* FROM posts JOIN posts_hashtags ON posts.id=posts_hashtags.post_id  JOIN hashtags ON hashtags.id=posts_hashtags.hashtag_id AND hashtags.name='${hashtag}';`);
+        return res.status(200).send(result.rows)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(`${error.name}: ${error.message}`)
+    }
+};
