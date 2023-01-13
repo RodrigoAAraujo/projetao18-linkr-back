@@ -47,6 +47,6 @@ export async function selectPostsWithHashtag(req, res){
         return res.status(200).send(result.rows)
     } catch (error) {
         console.log(error);
-        res.status(500).send(`${error.name}: ${error.message}`);
+        res.status(500).send(`${error.name}: ${error.message}`)
     }
 };
