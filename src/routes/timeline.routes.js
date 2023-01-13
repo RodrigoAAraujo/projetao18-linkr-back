@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { postPosts, getPosts, teste } from "../controllers/timeline.controllers.js";
+import { postPosts, getPosts } from "../controllers/timeline.controllers.js";
 import authValidation from "../middlewares/authValidation.js";
 import { validatePost } from "../middlewares/posts.middlewares.js";
 

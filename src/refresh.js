@@ -1,7 +1,6 @@
 import { connection } from "./database/db.js";
 
 export async function Refresh(timeout){
-    console.log("passando aqui")
     const timeNow = Date.now() - timeout
     let resp = []
     try {
@@ -10,15 +9,13 @@ export async function Refresh(timeout){
         return console.log(error)
     }
 
-    if(resp.rowCount !== 0){
-        resp.rows.map( async (session) => {
-            try {
-                connection.query(`DELETE FROM sessions WHERE id = $1`, [session.id])
+    resp.rows.map( async (session) => {
+          try {
+            connection.query(`DELETE FROM sessions WHERE id = $1`, [session.id])
 
-                console.log("Session finished within user id: "+session.user_id)
-            } catch (error) {
-                console.log(error, "erro no try/catch de refresh")
-            }
-        })
-    }
+            console.log("Session finished within user id: "+session.user_id)
+          } catch (error) {
+              console.log(error, "erro no try/catch de refresh")
+          }
+    })
 }
