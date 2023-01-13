@@ -253,7 +253,10 @@ export async function loadComments(req, res){
             SELECT * FROM comments WHERE post_id=$1
         `, [postId])
 
-        return res.send(comments.rows)
+        return res.send({
+            "user_id" : `${session.rows[0].user_id}`,
+            "comments": comments.rows
+        })
 
     } catch (err) {
         console.log(err);
