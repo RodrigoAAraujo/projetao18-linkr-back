@@ -43,7 +43,9 @@ export async function validLoginSchema(req, res, next) {
     const { error } = userLogSchemma.validate(user, { abortEarly: false });
   
     if (error) {
+      
       const errors = error.details.map((detail) => detail.message);
+      console.log(user, errors)
       return res.status(422).send({ errors });
     }
     const userExists = await connection.query(
