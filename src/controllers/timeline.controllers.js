@@ -37,7 +37,7 @@ export async function postPosts(req, res){
 
 export async function getPosts(req, res){
 
-    console.log("oi")
+    
     let arrTimeline = [];
     let dadosLink;
 
@@ -45,7 +45,7 @@ export async function getPosts(req, res){
     const token = authorization?.replace("Bearer ", "");
 
     const verificaToken = await connection.query("SELECT * FROM sessions WHERE token=$1;", [token]);
-    console.log(verificaToken)
+    
     if(verificaToken.rows.length === 0){
         console.log("token inválido ou nao encontrado") 
         res.sendStatus(400) 
@@ -59,12 +59,13 @@ export async function getPosts(req, res){
         
         for (let c = 0; c < postsReverse.length; c++) {
 
-            console.log(postsReverse)
+            
             const userId = postsReverse[c].userId;
             const postId = postsReverse[c].id;
             const link = postsReverse[c].link;
             const comentary = postsReverse[c].description;
             const user = await connection.query('SELECT * FROM users WHERE id=$1;', [userId]);
+            console.log(user.rows[0].image_url, user.rows[0], "AAAAAAAAAAA")
             const imgUrl = user.rows[0].image_url;
             const name = user.rows[0].username;
 
@@ -82,7 +83,7 @@ export async function getPosts(req, res){
         
                     arrTimeline.push(newBody);
         
-                    console.log(arrTimeline)
+                    
                     
                     if (c === (postsReverse.length - 1)) {
         

@@ -58,6 +58,7 @@ export async function removeLike(req, res) {
         if (!token || token === "Bearer") {
             return res.sendStatus(401);
         }
+        
 
         const session = await connection.query(`
         SELECT * FROM sessions WHERE token = $1
@@ -69,7 +70,6 @@ export async function removeLike(req, res) {
 
         const userId = session.rows[0].user_id;
 
-        console.log(userId, postId)
         const infoLike = await connection.query(`
         SELECT * FROM likes WHERE user_id = $1 AND post_id = $2; 
         `, [userId, postId]);

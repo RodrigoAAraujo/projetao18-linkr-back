@@ -1,6 +1,7 @@
 import { connection } from "./database/db.js";
 
 export async function Refresh(timeout){
+    console.log("passando aqui")
     const timeNow = Date.now() - timeout
     let resp = []
     try {
@@ -19,3 +20,4 @@ export async function Refresh(timeout){
           }
     })
 }
+
