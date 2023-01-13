@@ -4,7 +4,6 @@ import authValidation from "../middlewares/authValidation.js";
 
 const router = Router();
 
-
 router.use(authValidation)
 
 router.post("/posts/like/:id", likePost);
