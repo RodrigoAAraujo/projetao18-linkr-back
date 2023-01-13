@@ -31,7 +31,7 @@ export async function insertHashtags(comentary, postId){
 export async function selectTrendingHashtags(req, res){
     try {
         const result = await connection.query(
-            'SELECT h.name, COUNT(p.id) AS "repetitions" FROM hashtags h JOIN posts_hashtags p ON h.id=p.hashtag_id GROUP BY h.name ORDER BY repetitions DESC;'
+            'SELECT h.name, COUNT(p.id) AS "repetitions" FROM hashtags h JOIN posts_hashtags p ON h.id=p.hashtag_id GROUP BY h.name ORDER BY repetitions DESC LIMIT 10;'
         );
         res.send(result.rows)
     } catch (error) {

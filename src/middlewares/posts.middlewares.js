@@ -1,9 +1,26 @@
-import { postSchema } from "../models/Post.js";
+import { postSchema, postUpdateSchema } from "../models/Post.js";
 
 export function validatePost(req, res, next) {
+  
   const body = req.body
+  console.log(body)
 
   const { error } = postSchema.validate(body, { abortEarly: false });
+
+  if (error) {
+    const errors = error.details.map((detail) => detail.message);
+    console.log(errors)
+    return res.status(422).send({ errors });
+  }
+
+  next()
+}
+
+export function validateUpdatePost(req, res, next){
+
+  const body = req.body
+
+  const { error } = postUpdateSchema.validate(body, { abortEarly: false });
 
   if (error) {
     const errors = error.details.map((detail) => detail.message);
@@ -11,4 +28,5 @@ export function validatePost(req, res, next) {
   }
 
   next()
+
 }

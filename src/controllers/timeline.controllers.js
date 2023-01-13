@@ -29,8 +29,9 @@ export async function getPosts(req, res) {
 
     try {
 
-        const posts = await connection.query('SELECT * FROM users JOIN posts ON posts.user_id = users.id ORDER BY created_at DESC');
-        res.send(posts.rows)
+        const posts = await connection.query('SELECT * FROM users JOIN posts ON posts.user_id = users.id ORDER BY created_at DESC LIMIT 20;');
+        const postsNoLimit = await connection.query('SELECT * FROM users JOIN posts ON posts.user_id = users.id ORDER BY created_at DESC;');
+        res.send([posts.rows, postsNoLimit.rows])
         return
     
     } catch (error) {
@@ -39,13 +40,12 @@ export async function getPosts(req, res) {
     }
 }
 
-export async function teste(req, res) {
+export async function timelineRefresh(req, res) {
     try {
-        const query = connection.query('SELECT * FROM users WHERE id=1;');
-        console.log(query.rows[0]);
-        res.sendStatus(200);
+        const posts = await connection.query('SELECT * FROM users JOIN posts ON posts.user_id = users.id ORDER BY created_at DESC;');
+        res.send(posts.rows);
         return;
     } catch (error) {
-        console.log(error, "erro try/catch teste")
+        console.log(error, "erro try/catch timelineRefresh")
     }
 }
