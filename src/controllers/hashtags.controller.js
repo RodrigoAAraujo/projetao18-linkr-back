@@ -43,8 +43,8 @@ export async function selectTrendingHashtags(req, res){
 export async function selectPostsWithHashtag(req, res){
     const {hashtag} = req.params;
     try {
-        const result = await connection.query(`SELECT posts.* FROM posts JOIN posts_hashtags ON posts.id=posts_hashtags.post_id  JOIN hashtags ON hashtags.id=posts_hashtags.hashtag_id AND hashtags.name='${hashtag}';`);
-        return res.status(200).send(result.rows)
+        const result = await connection.query(`SELECT posts.*, users.username, users.image_url FROM posts JOIN posts_hashtags ON posts.id=posts_hashtags.post_id  JOIN hashtags ON hashtags.id=posts_hashtags.hashtag_id AND hashtags.name='${hashtag}' JOIN users ON posts.user_id = users.id ORDER BY created_at DESC;`);
+        return res.status(200).send(result.rows);
     } catch (error) {
         console.log(error);
         res.status(500).send(`${error.name}: ${error.message}`)
