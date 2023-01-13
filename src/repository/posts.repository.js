@@ -33,3 +33,14 @@ export async function deletePostById(id){
         res.status(500).send(err.message);
     }
 }
+
+export async function updatePostById(id, comentary){
+
+    try{
+        connection.query("UPDATE posts SET comentary =$1 WHERE id=$2", [comentary, id])
+
+    }catch(err) {
+        console.log(err);
+        res.status(500).send(err.message);
+    }
+}
