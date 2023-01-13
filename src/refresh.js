@@ -10,14 +10,15 @@ export async function Refresh(timeout){
         return console.log(error)
     }
 
-    resp.rows.map( async (session) => {
-          try {
-            connection.query(`DELETE FROM sessions WHERE id = $1`, [session.id])
+    if(resp.rowCount !== 0){
+        resp.rows.map( async (session) => {
+            try {
+                connection.query(`DELETE FROM sessions WHERE id = $1`, [session.id])
 
-            console.log("Session finished within user id: "+session.user_id)
-          } catch (error) {
-              console.log(error, "erro no try/catch de refresh")
-          }
-    })
+                console.log("Session finished within user id: "+session.user_id)
+            } catch (error) {
+                console.log(error, "erro no try/catch de refresh")
+            }
+        })
+    }
 }
-

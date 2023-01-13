@@ -2,33 +2,23 @@ import {validateToken} from "../repository/sessions.repository.js"
 
 export default async function authValidation(req, res, next){
     const {authorization} = req.headers
-
-    console.log(authorization)
-
     if(!authorization){
-        res.sendStatus(400)
-        return
-    }
-
+        return res.sendStatus(400);
+    };
     if(!authorization.includes("Bearer ")){
-        res.sendStatus(400)
-        return
-    }
-
-    const token = authorization.replace("Bearer ", "")
-
+        return res.sendStatus(400);
+    };
+    const token = authorization.replace("Bearer ", "");
     try{      
         const session = await validateToken(token)
-
         if(session.rowCount === 0){
-            res.sendStatus(404)
-            return
+            return res.sendStatus(404);
         }
 
-        next()
+        res.locals.session = session.rows[0]
 
-    }catch(err){
-        res.status(500).send({message: err})
-        return
+        next()
+    } catch(err){
+        return res.status(500).send({message: err})
     }
-}
+};

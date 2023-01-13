@@ -18,7 +18,7 @@ export async function create(req, res) {
   } catch (error) {
     res.status(500).send(error.message);
   }
-}
+};
 
 export async function login(req, res) {
     const { password } = res.locals.user;
@@ -46,9 +46,8 @@ export async function login(req, res) {
     } catch (error) {
       res.status(500).send(error.message);
   }
-}
-  
-  
+};
+
 export async function sessionRenew(req, res) {
     let session = res.locals.session
 
@@ -66,7 +65,7 @@ export async function sessionRenew(req, res) {
       } catch (err) {
         res.status(500).send(err.message);
       }
-}
+};
 
 export async function sendUsersNamesImages(req, res){
   const {name} = req.params
@@ -82,6 +81,6 @@ export async function sendUsersNamesImages(req, res){
         console.log(err);
         res.status(500).send(err.message);
     }
-}
+};
 
 
